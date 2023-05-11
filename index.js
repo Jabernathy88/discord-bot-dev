@@ -1,5 +1,6 @@
-import { config } from "dotenv";
-import { Client, GatewayIntentBits } from "discord.js";
+import { config } from 'dotenv';
+import { Client, GatewayIntentBits } from 'discord.js';
+import { REST } from '@discordjs/rest';
 
 config();
 
@@ -12,6 +13,8 @@ const client = new Client({
 });
 
 const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
+
+const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 client.login(TOKEN);
 
@@ -27,4 +30,4 @@ client.on('messageCreate', (message) => {
 
 client.on('channelPinsUpdate', (channel, date) => {
     
-})
+});
