@@ -1,8 +1,12 @@
 import { config } from 'dotenv';
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits, Routes } from 'discord.js';
 import { REST } from '@discordjs/rest';
 
 config();
+
+const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
+const CLIENT_ID = process.env.CLIENT_ID; // for calling to guild commands 
+const GUILD_ID = process.env.GUILD_ID // parlance, guild = discord server, nowadays
 
 const client = new Client({ 
     intents: [
@@ -12,22 +16,29 @@ const client = new Client({
     ],
 });
 
-const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
-
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 
-client.login(TOKEN);
+client.on('ready', () => console.log(`${client.user.tag} has logged in!`));
 
-client.on('ready', () => {
-    console.log(`${client.user.tag} has logged in!`) 
-});
+async function main() {
+    const commands = [
+        {
+            name: 'tutorialhelp',
+            description: 'Give help tutorial command'
+        },
+        // insert more as objects within this array
+    ];
 
-client.on('messageCreate', (message) => {
-    console.log(message.content);
-    console.log(message.createdAt.toDateString());
-    console.log(message.author.tag);
-});
+    try {
+        console.log('Started refreshing application (/) commands.')
+        Routes.applicationCommand()
+        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
+            body: commands,
+        });
+        client.login(TOKEN);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
-client.on('channelPinsUpdate', (channel, date) => {
-    
-});
+main();
