@@ -20,20 +20,27 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 client.on('ready', () => console.log(`${client.user.tag} has logged in!`));
 
-// MORE NEW CODE HERE
 client.on('interactionCreate', (interaction) => {
     if (interaction.isChatInputCommand()) {
-        console.log("Hello Frosty.");
-        interaction.reply({ content: 'Kublai Khan did decree...' })
+        const userContent = interaction.options.get('food').value
+        // console.log(userContent)
+        interaction.reply({ content: `Kublai Khan did decree ...${userContent}` })
     }
 });
-
 
 async function main() {
     const commands = [
         {
             name: 'kublai',
-            description: 'quote the poem to user.'
+            description: 'quote the poem to user.',
+            options: [
+                {
+                    name: 'food',
+                    description: 'Your choice of food.',
+                    type: 3,
+                    required: true,
+                }
+            ]
         },
         // insert more as objects within this array
     ];
