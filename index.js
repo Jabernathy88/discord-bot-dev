@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import { Client, GatewayIntentBits, Routes } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 
 config();
@@ -22,28 +23,50 @@ client.on('ready', () => console.log(`${client.user.tag} has logged in!`));
 
 client.on('interactionCreate', (interaction) => {
     if (interaction.isChatInputCommand()) {
-        const userContent = interaction.options.get('food').value
+        const userFood = interaction.options.get('food').value
+        const userDrink = interaction.options.get('drink').value
         // console.log(userContent)
-        interaction.reply({ content: `Kublai Khan did decree ...${userContent}` })
+        interaction.reply({ content: `Kublai Khan did decree: ${userFood} and ${userDrink}!` })
     }
 });
 
 async function main() {
-    const commands = [
-        {
-            name: 'kublai',
-            description: 'quote the poem to user.',
-            options: [
-                {
-                    name: 'food',
-                    description: 'Your choice of food.',
-                    type: 3,
-                    required: true,
-                }
-            ]
-        },
-        // insert more as objects within this array
-    ];
+
+    const orderCommand = new SlashCommandBuilder()
+        .setName('order')
+        .setDescription('Order your favorite meal!')
+        .addStringOption((option) => option.setName('food').setDescription('Select your favorite food').setRequired(true).setChoices(
+            {
+                name: 'CAKE',
+                value: 'cakes',
+            },
+            {
+                name: 'STEAK',
+                value: 'steaksss',
+            },
+            {
+                name: 'Pizza',
+                value: 'pizza',
+            },
+        ))
+        .addStringOption((option) => option.setName('drink').setDescription('Select favorite drink').setRequired(true).setChoices(
+            {
+                name: 'Water',
+                value: 'water',
+            },
+            {
+                name: 'Soda',
+                value: 'soda',
+            },
+            {
+                name: 'Juice',
+                value: 'juice',
+            },
+        )
+    );
+
+    const commands = [orderCommand.toJSON()]
+    
 
     try {
         console.log('Started refreshing application (/) commands.')
