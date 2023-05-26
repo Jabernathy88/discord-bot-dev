@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 import { Client, GatewayIntentBits, Routes } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
+import OrderCommand from './commands/order.js';
 
 config();
 
@@ -9,7 +10,7 @@ const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
 const CLIENT_ID = process.env.CLIENT_ID; // for calling to guild commands 
 const GUILD_ID = process.env.GUILD_ID // parlance, guild = discord server, nowadays
 
-const client = new Client({ 
+const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -25,48 +26,14 @@ client.on('interactionCreate', (interaction) => {
     if (interaction.isChatInputCommand()) {
         const userFood = interaction.options.get('food').value
         const userDrink = interaction.options.get('drink').value
-        // console.log(userContent)
+
         interaction.reply({ content: `Kublai Khan did decree: ${userFood} and ${userDrink}!` })
     }
 });
 
 async function main() {
 
-    const orderCommand = new SlashCommandBuilder()
-        .setName('order')
-        .setDescription('Order your favorite meal!')
-        .addStringOption((option) => option.setName('food').setDescription('Select your favorite food').setRequired(true).setChoices(
-            {
-                name: 'CAKE',
-                value: 'cakes',
-            },
-            {
-                name: 'STEAK',
-                value: 'steaksss',
-            },
-            {
-                name: 'Pizza',
-                value: 'pizza',
-            },
-        ))
-        .addStringOption((option) => option.setName('drink').setDescription('Select favorite drink').setRequired(true).setChoices(
-            {
-                name: 'Water',
-                value: 'water',
-            },
-            {
-                name: 'Soda',
-                value: 'soda',
-            },
-            {
-                name: 'Juice',
-                value: 'juice',
-            },
-        )
-    );
-
-    const commands = [orderCommand.toJSON()]
-    
+    const commands = [OrderCommand];
 
     try {
         console.log('Started refreshing application (/) commands.')
