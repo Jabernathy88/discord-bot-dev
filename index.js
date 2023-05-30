@@ -1,13 +1,12 @@
 import { config } from 'dotenv';
-import { Client, GatewayIntentBits, Routes } from 'discord.js';
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { Client, GatewayIntentBits, Routes, SlashCommandBuilder } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import OrderCommand from './commands/order.js';
 
 config();
 
 const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
-const CLIENT_ID = process.env.CLIENT_ID; // for calling to guild commands 
+const CLIENT_ID = process.env.CLIENT_ID; // for calling to guild commands
 const GUILD_ID = process.env.GUILD_ID // parlance, guild = discord server, nowadays
 
 const client = new Client({
