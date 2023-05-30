@@ -3,6 +3,8 @@ import { Client, GatewayIntentBits, Routes, SlashCommandBuilder } from 'discord.
 import { REST } from '@discordjs/rest';
 import OrderCommand from './commands/order.js';
 
+// NEXT = VID TEN
+
 config();
 
 const TOKEN = process.env.JER_BOT_TOKEN; // bot authentication for discord api
